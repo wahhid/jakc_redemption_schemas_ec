@@ -32,5 +32,10 @@ access_rdm_schemas_card_type_operator,rdm.schemas.card.type.operator,model_rdm_s
 access_rdm_schemas_tenant_category_manager,rdm.schemas.tenant.category.manager,model_rdm_schemas_tenant_category,base.group_rdm_manager,1,1,1
 access_rdm_schemas_tenant_category_officer,rdm.schemas.tenant.category.officer,model_rdm_schemas_tenant_category,base.group_rdm_officer,1,1,1,1
 access_rdm_schemas_tenant_category_operator,rdm.schemas.tenant.category.operator,model_rdm_schemas_tenant_category,base.group_rdm_operator,1,0,0,0
-
+access_rdm_schemas_blast_manager,rdm.schemas.blast.manager,model_rdm_schemas_blast,base.group_rdm_manager,1,1,1
+access_rdm_schemas_blast_officer,rdm.schemas.blast.officer,model_rdm_schemas_blast,base.group_rdm_officer,1,1,1,1
+access_rdm_schemas_blast_operator,rdm.schemas.blast.operator,model_rdm_schemas_blast,base.group_rdm_operator,1,0,0,0
+access_rdm_schemas_blast_detail_manager,rdm.schemas.blast.detail.manager,model_rdm_schemas_blast_detail,base.group_rdm_manager,1,1,1
+access_rdm_schemas_blast_detail_officer,rdm.schemas.blast.detail.officer,model_rdm_schemas_blast_detail,base.group_rdm_officer,1,1,1,1
+access_rdm_schemas_blast_detail_operator,rdm.schemas.blast.detail.operator,model_rdm_schemas_blast_detail,base.group_rdm_operator,1,0,0,0
 
