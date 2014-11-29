@@ -174,7 +174,10 @@
             <field name="model">rdm.schemas.blast</field>						
             <field name="type">form</field>						
             <field name="arch" type="xml">
-                <form string="Schemas Blast" version="7.0">  
+                <form string="Schemas Blast" version="7.0">
+                	<header>
+                    	<button name="blast_customer" string="Blast Customer" type="object" class="oe_highlight"/>
+                    </header>                  
                     <group>
                     	<field name="schemas_id"/>                           
                         <field name="schedule"/>
@@ -348,6 +351,26 @@
                 </search>
             </field>
         </record>   
+         
+		<!-- BLAST CUSTOMER POPUP WINDOW -->        
+        <record model="ir.ui.view" id="view_rdm_schemas_blast_customer_form">
+            <field name="name">rdm.schemas.blast.customer.form</field>
+            <field name="model">rdm.schemas.blast.customer</field>						            					
+            <field name="arch" type="xml">
+                <form string="Redemption Blast Customer" version="7.0">  
+                    <group>                                                                                                    
+                        <field name="search_type"/>
+                        <field name="search_by_zone"/>
+                        <field name="search_by_customer"/>
+                    </group>                    
+                    <footer>
+                        <button name="add_customer" string="Add Customer" type="object" class="oe_highlight"/>    
+                        or                   
+                        <button string="Cancel" class="oe_link" special="cancel"/>                    
+                    </footer>                    
+                </form>
+            </field>
+        </record>	       
                 
         <!-- RDM/ACTION -->
         <!-- PROMO -->
