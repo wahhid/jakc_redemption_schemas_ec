@@ -167,7 +167,50 @@
                 </form>
             </field>
         </record>
-                      
+                   
+        <!-- RDM/SCHEMAS BLAST -->		
+        <record model="ir.ui.view" id="view_rdm_schemas_blast_form">
+            <field name="name">rdm.schemas.blast.form</field>
+            <field name="model">rdm.schemas.blast</field>						
+            <field name="type">form</field>						
+            <field name="arch" type="xml">
+                <form string="Schemas Blast">  
+                    <group>
+                    	<field name="schemas_id"/>                           
+                        <field name="schedule"/>
+                        <field name="type"/>
+                        <field name="state"/>                            
+                    </group>
+                    <notebook>
+						<page string="Blast">
+	                    	<field name="blast_detail_ids" widget="one2many_list" nolabel="1" class="oe_inline oe_no_button" context="{'schemas_id': active_id}">
+	                        	<tree>
+	                              	<field name="customer_id"/>
+	 								<field name="state"/>                                   
+	                          	</tree>                                                                                          
+	                      	</field>
+	                   	</page>
+                    </notebook>
+                </form>
+            </field>
+        </record>
+        
+		<!-- RDM/SCHEMAS BLAST DETAIL -->		
+        <record model="ir.ui.view" id="view_rdm_schemas_rules_form">
+            <field name="name">rdm.schemas.rules.form</field>
+            <field name="model">rdm.schemas.rules</field>						
+            <field name="type">form</field>						
+            <field name="arch" type="xml">
+                <form string="schemas Rules">  
+                    <group>
+                    	<field name="schemas_id"/>                           
+                        <field name="rules_id"/>
+                        <field name="schemas"/>                            
+                    </group>
+                </form>
+            </field>
+        </record>        
+                              
         <!-- RDM/schemas-->		
         <record model="ir.ui.view" id="view_rdm_schemas_form">
             <field name="name">rdm.schemas.form</field>
@@ -264,6 +307,14 @@
 	                                <tree>
 	                                    <field name="rules_id"/>
 	 									<field name="schemas"/>                                   
+	                                </tree>                                                                                          
+	                            </field>
+	                        </page>
+	                        <page string="Blast">
+	                        	<field name="blast_ids" widget="one2many_list" nolabel="1" class="oe_inline oe_no_button" context="{'schemas_id': active_id}">
+	                                <tree>
+	                                    <field name="schedule"/>
+	 									<field name="state"/>                                   
 	                                </tree>                                                                                          
 	                            </field>
 	                        </page>

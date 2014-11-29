@@ -9,6 +9,25 @@ AVAILABLE_STATES = [
     ('done','Close'),    
 ]
 
+AVAILABLE_BLAST_STATES = [
+    ('draft','Draft'),
+    ('ready','Ready'),
+    ('process','Process'),                        
+    ('done','Close'),    
+    ('failed','Failed'),
+]
+
+AVAILABLE_EMAIL_STATES = [
+    ('draft','Draft'),
+    ('ready','Ready'),
+    ('sent','Sent'),                        
+    ('failed','Failed'),
+]
+
+AVAILABLE_TYPE_STATES = [
+    ('email','Email'),
+    ('sms','SMS'),
+]
 
 class rdm_schemas_segment(osv.osv):
     _name = 'rdm.schemas.segment'
@@ -145,6 +164,34 @@ class rdm_schemas_rules(osv.osv):
         
 rdm_schemas_rules()   
 
+class rdm_schemas_blast(osv.osv):
+    _name = 'rdm.schemas.blast'
+    _description = 'Redemption Schemas Blast'
+    _column = {
+        'schemas_id': fields.many2one('rdm.schemas', 'Schemas', readonly=True),
+        'schedule': fields.datetime('Schedule',required=True),        
+        'type': fields.selection(AVAILABLE_TYPE_STATES,'Type', size=16, required=True),
+        'blast_detail_ids': fields.one2many('rdm.schemas.blast.detail','blast_id'),
+        'state': fields.selection(AVAILABLE_BLAST_STATES, 'Status', size=16, readonly=True)
+    }
+    _defaults = {
+        'state': lambda *a: 'draft',
+    }
+rdm_schemas_blast()
+
+class rdm_schemas_blast_detail(osv.osv):
+    _name = 'rdm.schemas.blast.detail'
+    _description = 'Redemption Schemas Blast Detail'
+    _column = {
+        'blast_id': fields.many2one('rdm.schemas.blast', 'Schemas Blast', readonly=True),
+        'customer_id': fields.many2one('rdm.customer', 'Customer', required=True),
+        'state': fields.selection(AVAILABLE_EMAIL_STATES, 'Status', size=16, readonly=True)
+    }
+    _defaults = {
+        'state': lambda *a: 'draft',
+    }
+rdm_schemas_blast_detail()
+
 class rdm_schemas(osv.osv):
     _name = 'rdm.schemas'
     _description = 'Redemption schemas'
@@ -224,6 +271,9 @@ class rdm_schemas(osv.osv):
         
         #Rules List        
         'rules_ids': fields.one2many('rdm.schemas.rules','schemas_id','Rules'),        
+        
+        #Blast List
+        'blast_ids': fields.one2many('rdm.schemas.blast','schemas_id','Blast'),
         
         'receipt_header': fields.char('Receipt Header', size=50),
         'receipt_footer': fields.text('Receipt Footer'),
