@@ -199,7 +199,7 @@ class rdm_schemas_blast(osv.osv):
         'schemas_id': fields.many2one('rdm.schemas', 'Schemas', readonly=True),
         'schedule': fields.datetime('Schedule',required=True),        
         'type': fields.selection(AVAILABLE_TYPE_STATES,'Type', size=16, required=True),
-        'blast_detail_ids': fields.one2many('rdm.schemas.blast.detail','blast_id'),
+        'blast_detail_ids': fields.one2many('rdm.schemas.blast.detail','blast_id', readonly=True),
         'state': fields.selection(AVAILABLE_BLAST_STATES, 'Status', size=16, readonly=True),
     }
     _defaults = {
