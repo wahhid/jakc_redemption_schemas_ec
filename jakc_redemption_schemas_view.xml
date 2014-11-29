@@ -176,7 +176,7 @@
             <field name="arch" type="xml">
                 <form string="Schemas Blast" version="7.0">
                 	<header>
-                    	<button name="blast_customer" string="Blast Customer" type="object" class="oe_highlight"/>
+                    	<button name="blast_customer" string="Blast Customer" type="object" class="oe_highlight" state="draft,ready"/>
                     </header>                  
                     <group>
                     	<field name="schemas_id"/>                           
