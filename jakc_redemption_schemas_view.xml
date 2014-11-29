@@ -174,7 +174,7 @@
             <field name="model">rdm.schemas.blast</field>						
             <field name="type">form</field>						
             <field name="arch" type="xml">
-                <form string="Schemas Blast">  
+                <form string="Schemas Blast" version="7.0">  
                     <group>
                     	<field name="schemas_id"/>                           
                         <field name="schedule"/>
