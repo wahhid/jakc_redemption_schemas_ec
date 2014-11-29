@@ -167,7 +167,7 @@ rdm_schemas_rules()
 class rdm_schemas_blast(osv.osv):
     _name = 'rdm.schemas.blast'
     _description = 'Redemption Schemas Blast'
-    _column = {
+    _columns = {
         'schemas_id': fields.many2one('rdm.schemas', 'Schemas', readonly=True),
         'schedule': fields.datetime('Schedule',required=True),        
         'type': fields.selection(AVAILABLE_TYPE_STATES,'Type', size=16, required=True),
@@ -182,7 +182,7 @@ rdm_schemas_blast()
 class rdm_schemas_blast_detail(osv.osv):
     _name = 'rdm.schemas.blast.detail'
     _description = 'Redemption Schemas Blast Detail'
-    _column = {
+    _columns = {
         'blast_id': fields.many2one('rdm.schemas.blast', 'Schemas Blast', readonly=True),
         'customer_id': fields.many2one('rdm.customer', 'Customer', required=True),
         'state': fields.selection(AVAILABLE_EMAIL_STATES, 'Status', size=16, readonly=True)
