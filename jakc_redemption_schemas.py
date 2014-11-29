@@ -29,6 +29,14 @@ AVAILABLE_TYPE_STATES = [
     ('sms','SMS'),
 ]
 
+
+AVAILABLE_SEARCH_TYPE_STATES = [
+    ('all','All'),
+    ('customer','By Customer'),
+    ('zone','By Zone'),    
+]
+
+
 class rdm_schemas_segment(osv.osv):
     _name = 'rdm.schemas.segment'
     _description = 'Redemption Trans Segment'
@@ -167,6 +175,26 @@ rdm_schemas_rules()
 class rdm_schemas_blast(osv.osv):
     _name = 'rdm.schemas.blast'
     _description = 'Redemption Schemas Blast'
+    
+    def _get_trans(self, cr, uid, trans_id, context=None):
+        return self.browse(cr, uid, trans_id, context=context)
+    
+    def start_blast(self, cr, uid, ids, context=None):
+        trans_id = ids[0]
+        trans = self._get_trans(cr, uid, trans_id, context)
+    
+    def blast_customer(self, cr, uid, ids, context=None):
+        return {
+               'type': 'ir.actions.act_window',
+               'name': 'Blast Customer',
+               'view_mode': 'form',
+               'view_type': 'form',                              
+               'res_model': 'rdm.schemas.blast.customer',
+               'nodestroy': True,
+               'target':'new',
+               'context': {'blast_customer_id': ids[0]},
+        } 
+            
     _columns = {
         'schemas_id': fields.many2one('rdm.schemas', 'Schemas', readonly=True),
         'schedule': fields.datetime('Schedule',required=True),        
@@ -192,6 +220,26 @@ class rdm_schemas_blast_detail(osv.osv):
     }
 rdm_schemas_blast_detail()
 
+class rdm_schemas_blast_customer(osv.osv_memory):
+    _name = 'rdm.schemas.blast.customer'
+    _description = 'Redemption Schema Blast Customer'
+    
+    def add_customer(self, cr, uid, ids, context=None):
+        params = self.browse(cr, uid, ids, context=context)
+        param = params[0]           
+        customer_id = context.get('blast_customer_id',False)
+        data = {}              
+        if param.password_new == param.password_confirm:
+            data.update({'password':param.password_new})
+            self.pool.get('rdm.customer').write(cr, uid, [customer_id], data, context=context)                                                
+        return True
+        
+    _columns = {
+        'search_type': fields.selection(AVAILABLE_SEARCH_TYPE_STATES,'Search Type', size=16, required=True),
+        'search_by_customer': fields.many2one('rdm.customer','Customer'),
+        'search_by_zone': fields.many2one('rdm.customer.zone','Customer Zone'),        
+    }
+    
 class rdm_schemas(osv.osv):
     _name = 'rdm.schemas'
     _description = 'Redemption schemas'
