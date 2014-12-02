@@ -308,7 +308,7 @@ class rdm_schemas(osv.osv):
         ids = self.pool.get('rdm.schemas').search(cr, uid, [('state','=','open'),], context=context)
         return self.pool.get('rdm.schemas').browse(cr, uid, ids, context=context)
         
-    def start_blast(self, cr, uid, ids, context=None):
+    def start_blast(self, cr, uid, context=None):
         _logger.info("Start Schemas Blast")
         active_schemas = self.pool.get('rdm.schemas').active_schemas(cr, uid, context=context)
         for schemas in active_schemas:
