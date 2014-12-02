@@ -330,7 +330,6 @@ class rdm_schemas(osv.osv):
                             message.update({'subject':subject})
                             message.update({'body_html':body_html})
                             self._send_email_notification(cr, uid, message, context)
-
         _logger.info("End Schemas Blast")
         
     def _get_open_schemas(self, cr, uid, trans_id, context=None):        
