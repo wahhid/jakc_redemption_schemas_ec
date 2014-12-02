@@ -1,5 +1,8 @@
 from openerp.osv import fields, osv
 from datetime import datetime
+import logging
+
+_logger = logging.getLogger(__name__)
 
 AVAILABLE_STATES = [
     ('draft','Draft'),
@@ -176,12 +179,24 @@ class rdm_schemas_blast(osv.osv):
     _name = 'rdm.schemas.blast'
     _description = 'Redemption Schemas Blast'
     
+    def trans_ready(self, cr, uid, ids, context=None):        
+        self.write(cr,uid,ids,{'state':'ready'})  
+        return True
+    
+    def trans_process(self, cr, uid, ids, context=None):        
+        self.write(cr,uid,ids,{'state':'process'})  
+        return True
+
+    def trans_done(self, cr, uid, ids, context=None):        
+        self.write(cr,uid,ids,{'state':'done'})  
+        return True
+    
+    def trans_failed(self, cr, uid, ids, context=None):        
+        self.write(cr,uid,ids,{'state':'failed'})  
+        return True
+    
     def _get_trans(self, cr, uid, trans_id, context=None):
         return self.browse(cr, uid, trans_id, context=context)
-    
-    def start_blast(self, cr, uid, ids, context=None):
-        trans_id = ids[0]
-        trans = self._get_trans(cr, uid, trans_id, context)
     
     def blast_customer(self, cr, uid, ids, context=None):
         return {
@@ -202,22 +217,39 @@ class rdm_schemas_blast(osv.osv):
         'blast_detail_ids': fields.one2many('rdm.schemas.blast.detail','blast_id', readonly=True),
         'state': fields.selection(AVAILABLE_BLAST_STATES, 'Status', size=16, readonly=True),
     }
+    
     _defaults = {
         'state': lambda *a: 'draft',
     }
+    
 rdm_schemas_blast()
 
 class rdm_schemas_blast_detail(osv.osv):
     _name = 'rdm.schemas.blast.detail'
     _description = 'Redemption Schemas Blast Detail'
+    
+    def trans_ready(self, cr, uid, ids, context=None):        
+        self.write(cr,uid,ids,{'state':'ready'})  
+        return True
+    
+    def trans_sent(self, cr, uid, ids, context=None):        
+        self.write(cr,uid,ids,{'state':'sent'})  
+        return True
+     
+    def trans_failed(self, cr, uid, ids, context=None):        
+        self.write(cr,uid,ids,{'state':'failed'})  
+        return True
+    
     _columns = {
         'blast_id': fields.many2one('rdm.schemas.blast', 'Schemas Blast', readonly=True),
         'customer_id': fields.many2one('rdm.customer', 'Customer', required=True),
         'state': fields.selection(AVAILABLE_EMAIL_STATES, 'Status', size=16, readonly=True)
     }
+    
     _defaults = {
         'state': lambda *a: 'draft',
     }
+    
 rdm_schemas_blast_detail()
 
 class rdm_schemas_blast_customer(osv.osv_memory):
@@ -271,6 +303,35 @@ class rdm_schemas(osv.osv):
     def _get_trans(self, cr, uid, ids , context=None):
         trans_id = ids[0]
         return self.browse(cr, uid, trans_id, context=context);
+    
+    def active_schemas(self, cr, uid, context=None):
+        ids = self.pool.get('rdm.schemas').search(cr, uid, [('state','=','open'),], context=context)
+        return self.pool.get('rdm.schemas').browse(cr, uid, ids, context=context)
+        
+    def start_blast(self, cr, uid, ids, context=None):
+        _logger.info("Start Schemas Blast")
+        active_schemas = self.pool.get('rdm.schemas').active_schemas(cr, uid, context=context)
+        for schemas in active_schemas:
+            blast_ids = schemas.blast_ids
+            for blast in blast_ids:
+                if blast.state == 'ready':
+                    if blast.schedule >= datetime.now():
+                        self.pool.get('rdm.schemas.blast').trans_process(cr, uid, [blast.id],context=context)
+                        email_from = 'info@taman-anggrek-mall.com'
+                        subject = schemas.name
+                        body_html = schemas.email
+                        blast_detail_ids = blast.blast_detail_ids
+                        for blast_detail in blast_detail_ids:
+                            customer_id = blast_detail.customer_id
+                            email_to = customer_id.email
+                            message = {}
+                            message.update({'email_from':email_from})
+                            message.update({'email_to':email_to})
+                            message.update({'subject':subject})
+                            message.update({'body_html':body_html})
+                            self._send_email_notification(cr, uid, message, context)
+
+        _logger.info("End Schemas Blast")
         
     def _get_open_schemas(self, cr, uid, trans_id, context=None):        
         trans = self._get_trans(cr, uid, trans_id, context)     
@@ -284,6 +345,19 @@ class rdm_schemas(osv.osv):
         else:
             return False        
 
+    def _send_email_notification(self, cr, uid, values, context=None):
+        _logger.info(values['Start Send Email Notification'])
+        mail_mail = self.pool.get('mail.mail')
+        mail_ids = []
+        mail_ids.append(mail_mail.create(cr, uid, {
+            'email_from': values['email_from'],
+            'email_to': values['email_to'],
+            'subject': values['subject'],
+            'body_html': values['body_html'],
+            }, context=context))
+        mail_mail.send(cr, uid, mail_ids, context=context)
+        _logger.info(values['End Send Email Notification']) 
+    
     _columns = {
         'name': fields.char('Name', size=200, required=True),
         'type': fields.selection([('promo','Promo'),('point','Point')],'Type',readonly=True),        
