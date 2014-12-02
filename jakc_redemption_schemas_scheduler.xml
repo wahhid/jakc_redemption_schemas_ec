@@ -3,14 +3,14 @@
 	<data>
 		<record forcecreate="True" id="ir_cron_customer_blast_action" model="ir.cron">
 			<field name="name">Customer Blast Scheduler</field>
-			<field name="active" eval="True"/>
-			<field name="user_id" eval="base.user_root"/>
+			<field name="active">True</field>
+			<field name="user_id">base.user_root</field>
 			<field name="interval_number">1</field>
 			<field name="interval_type">days</field>
 			<field name="numbercall">-1</field>
-			<field name="doall" eval="False"/>
-			<field name="model" eval="rdm.schemas"/>
-			<field name="function" eval="start_blast"/>
+			<field name="doall">False</field>
+			<field name="model">rdm.schemas</field>
+			<field name="function">start_blast</field>
 		</record>
 	</data>
 </opener>
