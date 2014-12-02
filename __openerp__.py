@@ -8,7 +8,8 @@
     'data' : [			
         'security/ir.model.access.csv',        
         'jakc_redemption_schemas_view.xml',
-        'jakc_redemption_schemas_menu.xml',        
+        'jakc_redemption_schemas_menu.xml',     
+        'jakc_redemption_schemas_scheduler.xml',   
     ],
     'installable': True,
     'auto_install': False,
