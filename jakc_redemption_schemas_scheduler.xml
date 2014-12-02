@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<opener>
+<openerp>
 	<data>
 		<record forcecreate="True" id="ir_cron_customer_blast_action" model="ir.cron">
 			<field name="name">Customer Blast Scheduler</field>
@@ -13,4 +13,4 @@
 			<field name="function">start_blast</field>
 		</record>
 	</data>
-</opener>
+</openerp>
