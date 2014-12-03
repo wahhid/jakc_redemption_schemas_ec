@@ -177,6 +177,7 @@
                 <form string="Schemas Blast" version="7.0">
                 	<header>
                     	<button name="blast_customer" string="Blast Customer" type="object" class="oe_highlight" states="draft,ready"/>
+                    	<button name="trans_ready" string="Ready To Send" type="object" class="oe_highlight" states="draft"/>
                     </header>                  
                     <group>
                     	<field name="schemas_id"/>                           
