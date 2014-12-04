@@ -258,7 +258,7 @@ class rdm_schemas_blast_customer(osv.osv_memory):
     _description = 'Redemption Schema Blast Customer'
     
     def _check_customer(self, cr, uid, blast_id, customer_id, context=None):
-        detail_ids = self.search(cr, uid, [('blast_id','=', blast_id),('customer_id','=',customer_id)] , context)
+        detail_ids = self.pool.get('rdm.schemas.blast.detail').search(cr, uid, [('blast_id','=', blast_id),('customer_id','=',customer_id)] , context)
         if detail_ids:
             return True
         else:
