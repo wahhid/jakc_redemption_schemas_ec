@@ -208,7 +208,7 @@ class rdm_schemas_blast(osv.osv):
                'res_model': 'rdm.schemas.blast.customer',
                'nodestroy': True,
                'target':'new',
-               'context': {'blast_customer_id': ids[0]},
+               'context': {'blast_id': ids[0]},
         } 
             
     _columns = {
