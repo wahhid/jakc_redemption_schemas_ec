@@ -270,11 +270,11 @@ class rdm_schemas_blast_customer(osv.osv_memory):
         blast_id = context.get('blast_id')
         if param.search_type == 'all':
             customer_ids = self.pool.get('rdm.customer').search(cr, uid, [('state','=','active'),], context=context)
-            for customer_id in customer_ids:
+            for i in range(len(customer_ids)):
                 data = {}
                 data.update({'blast_id':blast_id})
-                data.update({'customer_id': customer_id})
-                if not self._check_customer(cr, uid, blast_id, customer_id, context):
+                data.update({'customer_id': customer_ids[i]})
+                if not self._check_customer(cr, uid, blast_id, customer_ids[i], context):
                     self.pool.get('rdm.schemas.blast.detail').create(cr, uid, data, context=context)
                     
         if param.search_type == 'customer':
@@ -288,11 +288,11 @@ class rdm_schemas_blast_customer(osv.osv_memory):
         if param.search_type == 'zone':
             customer_zone_id = param.by_zone
             customer_ids = self.pool.get('rdm.customer').search(cr, uid, [('zone','=',customer_zone_id)], context=context)
-            for customer_id in customer_ids:
+            for i in range(len(customer_ids)):
                 data = {}
                 data.update({'blast_id':blast_id})
-                data.update({'customer_id': customer_id})
-                if not self._check_customer(cr, uid, blast_id, customer_id, context):
+                data.update({'customer_id': customer_ids[i]})
+                if not self._check_customer(cr, uid, blast_id, customer_ids[i], context):
                     self.pool.get('rdm.schemas.blast.detail').create(cr, uid, data, context=context)
             
         return True
