@@ -274,16 +274,16 @@ class rdm_schemas_blast_customer(osv.osv_memory):
                 data = {}
                 data.update({'blast_id':blast_id})
                 data.update({'customer_id': customer_ids[i]})
-                if not self._check_customer(cr, uid, blast_id, customer_ids[i], context):
-                    self.pool.get('rdm.schemas.blast.detail').create(cr, uid, data, context=context)
+                #if not self._check_customer(cr, uid, blast_id, customer_ids[i], context):
+                self.pool.get('rdm.schemas.blast.detail').create(cr, uid, data, context=context)
                     
         if param.search_type == 'customer':
             customer_id = param.by_customer
             data = {}
             data.update({'blast_id':blast_id})
             data.update({'customer_id': customer_id})
-            if not self._check_customer(cr, uid, blast_id, customer_id, context):
-                self.pool.get('rdm.schemas.blast.detail').create(cr, uid, data, context=context)
+            #if not self._check_customer(cr, uid, blast_id, customer_id, context):
+            self.pool.get('rdm.schemas.blast.detail').create(cr, uid, data, context=context)
                 
         if param.search_type == 'zone':
             customer_zone_id = param.by_zone
@@ -292,8 +292,8 @@ class rdm_schemas_blast_customer(osv.osv_memory):
                 data = {}
                 data.update({'blast_id':blast_id})
                 data.update({'customer_id': customer_ids[i]})
-                if not self._check_customer(cr, uid, blast_id, customer_ids[i], context):
-                    self.pool.get('rdm.schemas.blast.detail').create(cr, uid, data, context=context)
+                #if not self._check_customer(cr, uid, blast_id, customer_ids[i], context):
+                self.pool.get('rdm.schemas.blast.detail').create(cr, uid, data, context=context)
             
         return True
         
