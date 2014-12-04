@@ -361,8 +361,8 @@
                 <form string="Redemption Blast Customer" version="7.0">  
                     <group>                                                                                                    
                         <field name="search_type"/>
-                        <field name="search_by_zone"/>
-                        <field name="search_by_customer"/>
+                        <field name="by_zone"/>
+                        <field name="by_customer"/>
                     </group>                    
                     <footer>
                         <button name="add_customer" string="Add Customer" type="object" class="oe_highlight"/>    
