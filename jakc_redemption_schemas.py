@@ -265,6 +265,7 @@ class rdm_schemas_blast_customer(osv.osv_memory):
             return False
         
     def add_customer(self, cr, uid, ids, context=None):
+        _logger.info('Start Add Customer')
         params = self.browse(cr, uid, ids, context=context)
         param = params[0]           
         blast_id = context.get('blast_id')
@@ -294,7 +295,8 @@ class rdm_schemas_blast_customer(osv.osv_memory):
                 data.update({'customer_id': customer_ids[i]})
                 #if not self._check_customer(cr, uid, blast_id, customer_ids[i], context):
                 self.pool.get('rdm.schemas.blast.detail').create(cr, uid, data, context=context)
-            
+                
+        _logger.info('End Add Customer')    
         return True
         
     _columns = {
