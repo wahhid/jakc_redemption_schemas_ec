@@ -9,7 +9,8 @@ AVAILABLE_STATES = [
     ('draft','Draft'),
     ('waiting','Waiting'),
     ('review','Review'),
-    ('open','Open'),                        
+    ('open','Open'),    
+    ('pause','Pause'),                    
     ('done','Close'),    
 ]
 
@@ -188,10 +189,11 @@ class rdm_schemas_blast(osv.osv):
         self.write(cr,uid,ids,{'state':'process'})  
         return True
 
+
     def trans_done(self, cr, uid, ids, context=None):        
         self.write(cr,uid,ids,{'state':'done'})  
         return True
-    
+        
     def trans_failed(self, cr, uid, ids, context=None):        
         self.write(cr,uid,ids,{'state':'failed'})  
         return True
@@ -309,27 +311,34 @@ class rdm_schemas(osv.osv):
     _name = 'rdm.schemas'
     _description = 'Redemption schemas'
         
-    def schemas_review(self, cr, uid, ids, context=None):        
+    def trans_review(self, cr, uid, ids, context=None):        
         self.write(cr,uid,ids,{'state':'review'})
         #Send Email To Manager  
         return True
     
-    def schemas_start(self, cr, uid, ids, context=None):      
+    def trans_start(self, cr, uid, ids, context=None):      
         if self._get_open_schemas(cr, uid, ids,context):
             raise osv.except_osv(('Warning'), ('There are active schemas'))
         else:
             self.write(cr,uid,ids,{'state':'open'})  
             return True
    
-    def schemas_close(self, cr, uid, ids, context=None):        
+    def trans_pause(self, cr, uid, ids, context=None):        
+        self.write(cr,uid,ids,{'state':'pause'})  
+        return True
+    
+    def trans_close(self, cr, uid, ids, context=None):        
         self.write(cr,uid,ids,{'state':'done'})  
         return True
 
-    def schemas_reset(self, cr, uid, ids, context=None):        
-        self.write(cr,uid,ids,{'state':'open'})  
-        return True
+    def trans_reset(self, cr, uid, ids, context=None):        
+        if self._get_open_schemas(cr, uid, ids,context):
+            raise osv.except_osv(('Warning'), ('There are active schemas'))
+        else:
+            self.write(cr,uid,ids,{'state':'open'})  
+            return True
     
-    def schemas_waiting(self, cr, uid, ids, context=None):        
+    def trans_waiting(self, cr, uid, ids, context=None):        
         self.write(cr,uid,ids,{'state':'waiting'})  
         return True
     

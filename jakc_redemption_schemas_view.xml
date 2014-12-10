@@ -223,11 +223,12 @@
             <field name="arch" type="xml">
                 <form string="schemas" version="7.0">  
                     <header>                        
-                        <button name="schemas_review" string="Reques for Review" type="object" class="oe_highlight" states="waiting"/>                                                                                              
-                        <button name="schemas_start" string="Start schemas" type="object" class="oe_highlight" states="review"/>                                                                       
-                        <button name="schemas_close" string="End schemas" type="object" class="oe_highlight" states="open"/>                                                                                                                       
-                        <button name="schemas_reset" string="Re-open schemas" type="object" class="oe_highlight" states="done"/>                                                         
-                        <button name="schemas_print" string="Print schemas" type="object" class="oe_highlight" states="waiting,review,active,done"/>                                                         
+                        <button name="trans_review" string="Reques for Review" type="object" class="oe_highlight" states="waiting"/>                                                                                              
+                        <button name="trans_start" string="Start schemas" type="object" class="oe_highlight" states="review"/>                                                                       
+                        <button name="trans_pause" string="Pause schemas" type="object" class="oe_highlight" states="open"/>                        
+                        <button name="trans_close" string="End schemas" type="object" class="oe_highlight" states="open"/>                                                                                                                       
+                        <button name="trans_reset" string="Re-open schemas" type="object" class="oe_highlight" states="pause,done"/>                                                         
+                        <button name="trans_print" string="Print schemas" type="object" class="oe_highlight" states="waiting,review,active,done"/>                                                         
                     </header>
                     <sheet>
 	                    <group colspan="4">
