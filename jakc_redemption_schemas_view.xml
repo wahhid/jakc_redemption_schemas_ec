@@ -234,6 +234,7 @@
 	                    <group colspan="4">
 							<group string="General Information" colspan="4">
 	                       		<field name="name"/>
+	                       		<field name="calculation"/>
 	                       		<field name="description"/>
 		                        <field name="desc_email" widget="html"/>                        
 		                        <field name="desc_sms"/>                                                		                    	                       															
@@ -246,9 +247,8 @@
 				                    <field name="draw_date"/>                        																																	
 								</group>
 								<group>
-									<field name="spend_amount"/>
-				                    <field name="coupon"/>
-				                    <field name="point"/>
+									<field name="coupon_spend_amount"/>
+				                    <field name="point_spend_amount"/>
 				                    <field name="limit_point"/>
 				                    <field name="point_expired_date"/>                    	                    	                         	                           																
 								</group>
@@ -264,49 +264,54 @@
 	                    <notebook colspan="4">
 	                        <page string="Image">
 	                            <field name="image1" widget="image"/>                                
-	                        </page>                                        
-	                        <page string="Segment">
-	                            <field name="segment_ids" widget="one2many_list" nolabel="1" context="{'schemas_id': active_id}"/>
+	                        </page>                
+	                        <page string="Filter">
+	                        	<notebook>
+									<page string="Segment">
+			                            <field name="segment_ids" widget="one2many_list" nolabel="1" context="{'schemas_id': active_id}"/>
+			                        </page>                        
+			                        <page string="Gender">
+			                            <field name="gender_ids" widget="one2many_list" nolabel="1" class="oe_inline oe_no_button" context="{'schemas_id': active_id}"/>
+			                        </page>                        
+			                        <page string="Religion">
+			                            <field name="religion_ids" widget="one2many_list" nolabel="1" class="oe_inline oe_no_button" context="{'schemas_id': active_id}"/>
+			                        </page>                                                
+			                        <page string="Ethnic">
+			                            <field name="ethnic_ids" widget="one2many_list" nolabel="1" class="oe_inline oe_no_button" context="{'schemas_id': active_id}"/>
+			                        </page>                        
+			                        <page string="Tenant">
+			                            <field name="tenant_ids" widget="one2many_list" nolabel="1" class="oe_inline oe_no_button" context="{'schemas_id': active_id}"/>
+			                        </page>                        
+			                        <page string="Marital">
+			                            <field name="marital_ids" widget="one2many_list" nolabel="1" class="oe_inline oe_no_button" context="{'schemas_id': active_id}"/>
+			                        </page>                        
+			                        <page string="Interest">
+			                            <field name="interest_ids" widget="one2many_list" nolabel="1" class="oe_inline oe_no_button" context="{'schemas_id': active_id}"/>
+			                        </page>                        
+			                        <page string="Card Type">
+			                            <field name="card_type_ids" widget="one2many_list" nolabel="1" class="oe_inline oe_no_button" context="{'schemas_id': active_id}">
+			                                <tree>
+			                                    <field name="card_type_id"/>
+			                                </tree>                            
+			                            </field>
+			                        </page>               
+			                        <page string="Tenant Category">
+			                            <field name="tenant_category_ids" widget="one2many_list" nolabel="1" class="oe_inline oe_no_button" context="{'schemas_id': active_id}">
+			                                <tree>
+			                                    <field name="tenant_category_id"/>
+			                                </tree>                                                           
+			                            </field>
+			                        </page>
+									<page string="AYC Participant">
+			                            <field name="ayc_participant_ids" widget="one2many_list" nolabel="1" class="oe_inline oe_no_button" context="{'schemas_id': active_id}">
+			                                <tree>
+			                                    <field name="participant_id"/>
+			                                </tree>                                                           
+			                            </field>
+			                        </page>     	          	                        		
+	                        	</notebook>
 	                        </page>                        
-	                        <page string="Gender">
-	                            <field name="gender_ids" widget="one2many_list" nolabel="1" class="oe_inline oe_no_button" context="{'schemas_id': active_id}"/>
-	                        </page>                        
-	                        <page string="Religion">
-	                            <field name="religion_ids" widget="one2many_list" nolabel="1" class="oe_inline oe_no_button" context="{'schemas_id': active_id}"/>
-	                        </page>                                                
-	                        <page string="Ethnic">
-	                            <field name="ethnic_ids" widget="one2many_list" nolabel="1" class="oe_inline oe_no_button" context="{'schemas_id': active_id}"/>
-	                        </page>                        
-	                        <page string="Tenant">
-	                            <field name="tenant_ids" widget="one2many_list" nolabel="1" class="oe_inline oe_no_button" context="{'schemas_id': active_id}"/>
-	                        </page>                        
-	                        <page string="Marital">
-	                            <field name="marital_ids" widget="one2many_list" nolabel="1" class="oe_inline oe_no_button" context="{'schemas_id': active_id}"/>
-	                        </page>                        
-	                        <page string="Interest">
-	                            <field name="interest_ids" widget="one2many_list" nolabel="1" class="oe_inline oe_no_button" context="{'schemas_id': active_id}"/>
-	                        </page>                        
-	                        <page string="Card Type">
-	                            <field name="card_type_ids" widget="one2many_list" nolabel="1" class="oe_inline oe_no_button" context="{'schemas_id': active_id}">
-	                                <tree>
-	                                    <field name="card_type_id"/>
-	                                </tree>                            
-	                            </field>
-	                        </page>               
-	                        <page string="Tenant Category">
-	                            <field name="tenant_category_ids" widget="one2many_list" nolabel="1" class="oe_inline oe_no_button" context="{'schemas_id': active_id}">
-	                                <tree>
-	                                    <field name="tenant_category_id"/>
-	                                </tree>                                                           
-	                            </field>
-	                        </page>
-							<page string="AYC Participant">
-	                            <field name="ayc_participant_ids" widget="one2many_list" nolabel="1" class="oe_inline oe_no_button" context="{'schemas_id': active_id}">
-	                                <tree>
-	                                    <field name="participant_id"/>
-	                                </tree>                                                           
-	                            </field>
-	                        </page>     	                                    
+	                                                  
 	                        <page string="Rules">
 	                            <field name="rules_ids" widget="one2many_list" nolabel="1" class="oe_inline oe_no_button" context="{'schemas_id': active_id}">
 	                                <tree>

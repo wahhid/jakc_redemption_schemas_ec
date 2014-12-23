@@ -1,3 +1,4 @@
+
 from openerp.osv import fields, osv
 from datetime import datetime
 import logging
@@ -34,6 +35,10 @@ AVAILABLE_TYPE_STATES = [
     ('sms','SMS'),
 ]
 
+AVAILABLE_CALCULATION = [
+    ('ditotal','Ditotal'),
+    ('terbesar','Terbesar'),                         
+]
 
 AVAILABLE_SEARCH_TYPE_STATES = [
     ('all','All'),
@@ -170,7 +175,7 @@ class rdm_schemas_rules(osv.osv):
     _columns = {
         'schemas_id': fields.many2one('rdm.schemas','schemas', readonly=True),
         'rules_id': fields.many2one('rdm.rules','Rules'),
-        'schemas': fields.selection([('ditotal','Di Total'),('terbesar','Terbesar')],'Schemas'),
+        'schemas': fields.selection([('ditotal','Ditotal'),('terbesar','Terbesar')],'Schemas'),
     }   
     _defaults = {
         'schemas_id': lambda self, cr, uid, context: context.get('schemas_id', False),}
@@ -188,7 +193,6 @@ class rdm_schemas_blast(osv.osv):
     def trans_process(self, cr, uid, ids, context=None):        
         self.write(cr,uid,ids,{'state':'process'})  
         return True
-
 
     def trans_done(self, cr, uid, ids, context=None):        
         self.write(cr,uid,ids,{'state':'done'})  
@@ -310,18 +314,16 @@ class rdm_schemas_blast_customer(osv.osv_memory):
 class rdm_schemas(osv.osv):
     _name = 'rdm.schemas'
     _description = 'Redemption schemas'
-        
+    
+            
     def trans_review(self, cr, uid, ids, context=None):        
         self.write(cr,uid,ids,{'state':'review'})
         #Send Email To Manager  
         return True
     
     def trans_start(self, cr, uid, ids, context=None):      
-        if self._get_open_schemas(cr, uid, ids,context):
-            raise osv.except_osv(('Warning'), ('There are active schemas'))
-        else:
-            self.write(cr,uid,ids,{'state':'open'})  
-            return True
+        self.write(cr,uid,ids,{'state':'open'})  
+        return True
    
     def trans_pause(self, cr, uid, ids, context=None):        
         self.write(cr,uid,ids,{'state':'pause'})  
@@ -332,11 +334,8 @@ class rdm_schemas(osv.osv):
         return True
 
     def trans_reset(self, cr, uid, ids, context=None):        
-        if self._get_open_schemas(cr, uid, ids,context):
-            raise osv.except_osv(('Warning'), ('There are active schemas'))
-        else:
-            self.write(cr,uid,ids,{'state':'open'})  
-            return True
+        self.write(cr,uid,ids,{'state':'open'})  
+        return True
     
     def trans_waiting(self, cr, uid, ids, context=None):        
         self.write(cr,uid,ids,{'state':'waiting'})  
@@ -346,7 +345,7 @@ class rdm_schemas(osv.osv):
         trans_id = ids[0]
         return self.browse(cr, uid, trans_id, context=context);
     
-    def active_schemas(self, cr, uid, context=None):
+    def active_schemas(self, cr, uid, context=None):        
         ids = self.pool.get('rdm.schemas').search(cr, uid, [('state','=','open'),], context=context)
         return self.pool.get('rdm.schemas').browse(cr, uid, ids, context=context)
         
@@ -374,6 +373,14 @@ class rdm_schemas(osv.osv):
                             self._send_email_notification(cr, uid, message, context)
         _logger.info("End Schemas Blast")
         
+    def close_schemas_scheduler(self, cr, uid, context=None):
+        _logger.info("Start Close Schemas Scheduler")
+        active_schemas = self.active_schemas(cr, uid, context)
+        for schemas in active_schemas:
+            if schemas.end_date < datetime.today():
+                self.trans_close(cr, uid, [schemas.id], context)
+        _logger.info("End Close Schemas Scheduler")
+
     def _get_open_schemas(self, cr, uid, trans_id, context=None):        
         trans = self._get_trans(cr, uid, trans_id, context)     
         ids = None   
@@ -401,7 +408,8 @@ class rdm_schemas(osv.osv):
     
     _columns = {
         'name': fields.char('Name', size=200, required=True),
-        'type': fields.selection([('promo','Promo'),('point','Point')],'Type',readonly=True),        
+        'type': fields.selection([('promo','Promo'),('point','Point')],'Type',readonly=True),
+        'calculation': fields.selection(AVAILABLE_CALCULATION,'Calculation',size=16,required=True),        
         'description': fields.text('Description',required=True),
         'desc_email': fields.text('Description For Email',required=True),
         'desc_sms': fields.char('Description For SMS', size=140,required=True),
@@ -409,9 +417,8 @@ class rdm_schemas(osv.osv):
         'end_date': fields.date('End Date',required=True),
         'last_redeem': fields.date('Last Redeem',required=True),                
         'draw_date': fields.date('Draw Date',required=True),
-        'spend_amount': fields.float('Spend Amount',required=True),
-        'coupon': fields.integer('Coupon #',required=True),
-        'point': fields.integer('Point #',required=True),        
+        'coupon_spend_amount': fields.float('Coupon Spend Amount',required=True),
+        'point_spend_amount': fields.float('Point Spend Amount',required=True),
         'limit_point': fields.integer('Point Limit',help="-1 for No Limit",required=True),
         'point_expired_date': fields.date('Point Expired Date', required=True),
         'segment_ids': fields.one2many('rdm.schemas.segment','schemas_id','Segment'),
@@ -445,14 +452,13 @@ class rdm_schemas(osv.osv):
         
     _defaults = {
         'state': lambda *a: 'draft',
-        'draw_date': fields.date.context_today,
-        'coupon': lambda *a: 0,
+        'draw_date': fields.date.context_today,        
         'limit_point': lambda *a: -1,
     }
         
     def create(self, cr, uid, values, context=None):                            
         id =  super(rdm_schemas, self).create(cr, uid, values, context=context)
-        self.schemas_waiting(cr, uid, [id], context)
+        self.trans_waiting(cr, uid, [id], context)
         return id    
 
 rdm_schemas()
