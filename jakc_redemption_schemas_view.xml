@@ -234,6 +234,7 @@
 	                    <group colspan="4">
 							<group string="General Information" colspan="4">
 	                       		<field name="name"/>
+	                       		<field name="type"/>
 	                       		<field name="calculation"/>
 	                       		<field name="description"/>
 		                        <field name="desc_email" widget="html"/>                        
@@ -244,10 +245,10 @@
 		         					<field name="start_date"/>
 				                    <field name="end_date"/>
 				                    <field name="last_redeem"/>
-				                    <field name="draw_date"/>                        																																	
+				                    <field name="draw_date" attrs="{'invisible':[('type','=','point')]}"/>                        																																	
 								</group>
 								<group>
-									<field name="coupon_spend_amount"/>
+									<field name="coupon_spend_amount" attrs="{'invisible':[('type','=','point')]}" />
 				                    <field name="point_spend_amount"/>
 				                    <field name="limit_point"/>
 				                    <field name="point_expired_date"/>                    	                    	                         	                           																
