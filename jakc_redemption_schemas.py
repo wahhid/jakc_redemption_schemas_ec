@@ -352,7 +352,18 @@ class rdm_schemas(osv.osv):
         if types == 'point':
             ids = self.pool.get('rdm.schemas').search(cr, uid, [('state','=','open'),('type','=','point')], context=context)
         return self.pool.get('rdm.schemas').browse(cr, uid, ids, context=context)
-        
+    
+    def active_promo_schemas(self, cr, uid, context=None):
+        ids = {}
+        ids = self.pool.get('rdm.schemas').search(cr, uid, [('state','=','open'),('type','=','promo')], context=context)
+        return self.pool.get('rdm.schemas').browse(cr, uid, ids, context=context)
+
+    def active_point_schemas(self, cr, uid, context=None):
+        ids = {}
+        ids = self.pool.get('rdm.schemas').search(cr, uid, [('state','=','open'),('type','=','point')], context=context)
+        return self.pool.get('rdm.schemas').browse(cr, uid, ids, context=context)
+    
+    
     def start_blast(self, cr, uid, context=None):
         _logger.info("Start Schemas Blast")
         active_schemas = self.pool.get('rdm.schemas').active_schemas(cr, uid, context=context)
