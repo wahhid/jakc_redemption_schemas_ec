@@ -345,11 +345,11 @@ class rdm_schemas(osv.osv):
         trans_id = ids[0]
         return self.browse(cr, uid, trans_id, context=context);
     
-    def active_schemas(self, cr, uid, type, context=None):
+    def active_schemas(self, cr, uid, types, context=None):
         ids = {}
-        if type == 'promo':        
+        if types == 'promo':        
             ids = self.pool.get('rdm.schemas').search(cr, uid, [('state','=','open'),('type','=','promo')], context=context)
-        if type == 'point':
+        if types == 'point':
             ids = self.pool.get('rdm.schemas').search(cr, uid, [('state','=','open'),('type','=','point')], context=context)
         return self.pool.get('rdm.schemas').browse(cr, uid, ids, context=context)
         
