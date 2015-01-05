@@ -348,19 +348,21 @@ class rdm_schemas(osv.osv):
     def active_schemas(self, cr, uid, types, context=None):
         ids = {}
         if types == 'promo':        
-            ids = self.pool.get('rdm.schemas').search(cr, uid, [('state','=','open'),('type','=','promo')], context=context)
+            ids = self.pool.get('rdm.schemas').search(cr, uid, [('state','=','open'),('type','=','promo'),], context=context)
         if types == 'point':
-            ids = self.pool.get('rdm.schemas').search(cr, uid, [('state','=','open'),('type','=','point')], context=context)
+            ids = self.pool.get('rdm.schemas').search(cr, uid, [('state','=','open'),('type','=','point'),], context=context)
         return self.pool.get('rdm.schemas').browse(cr, uid, ids, context=context)
     
     def active_promo_schemas(self, cr, uid, context=None):
         ids = {}
-        ids = self.pool.get('rdm.schemas').search(cr, uid, [('state','=','open'),('type','=','promo')], context=context)
+        today = datetime.now().strftime('%Y-%m-%d')
+        ids = self.pool.get('rdm.schemas').search(cr, uid, [('state','=','open'),('type','=','promo'),('start_date','<=',today),('end_date','>=', today)], context=context)
         return self.pool.get('rdm.schemas').browse(cr, uid, ids, context=context)
 
     def active_point_schemas(self, cr, uid, context=None):
         ids = {}
-        ids = self.pool.get('rdm.schemas').search(cr, uid, [('state','=','open'),('type','=','point')], context=context)
+        today = datetime.now().strftime('%Y-%m-%d')
+        ids = self.pool.get('rdm.schemas').search(cr, uid, [('state','=','open'),('type','=','point'),('start_date','<=',today),('end_date','>=', today)], context=context)
         return self.pool.get('rdm.schemas').browse(cr, uid, ids, context=context)
     
     
