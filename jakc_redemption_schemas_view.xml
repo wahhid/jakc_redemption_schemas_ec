@@ -176,8 +176,8 @@
             <field name="arch" type="xml">
                 <form string="Schemas Blast" version="7.0">
                 	<header>
-                    	<button name="blast_customer" string="Blast Customer" type="object" class="oe_highlight" states="draft,ready"/>
-                    	<button name="trans_ready" string="Ready To Send" type="object" class="oe_highlight" states="draft"/>
+                    	<button name="blast_customer" string="Blast Customer" type="object" class="oe_highlight"/>
+                    	<button name="trans_ready" string="Ready To Send" type="object" class="oe_highlight"/>
                     </header>                  
                     <group>
                     	<field name="schemas_id"/>                           
@@ -187,7 +187,7 @@
                     </group>
                     <notebook>
 						<page string="Blast">
-	                    	<field name="blast_detail_ids" widget="one2many_list" nolabel="1" class="oe_inline oe_no_button" context="{'schemas_id': active_id}">
+	                    	<field name="blast_detail_ids" widget="one2many_list" nolabel="1">
 	                        	<tree>
 	                              	<field name="customer_id"/>
 	 								<field name="state"/>                                   
@@ -234,8 +234,8 @@
 	                    <group colspan="4">
 							<group string="General Information" colspan="4">
 	                       		<field name="name"/>
-	                       		<field name="type"/>
-	                       		<field name="calculation"/>
+	                       		<field name="type"/>	                       		
+	                       		<field name="calculation"/>	                       	
 	                       		<field name="description"/>
 		                        <field name="desc_email" widget="html"/>                        
 		                        <field name="desc_sms"/>                                                		                    	                       															
@@ -248,10 +248,14 @@
 				                    <field name="draw_date" attrs="{'invisible':[('type','=','point')]}"/>                        																																	
 								</group>
 								<group>
+									<field name="max_spend_amount" 	/>							
 									<field name="coupon_spend_amount" attrs="{'invisible':[('type','=','point')]}" />
+									<field name="limit_coupon"/>
 				                    <field name="point_spend_amount"/>
 				                    <field name="limit_point"/>
-				                    <field name="point_expired_date"/>                    	                    	                         	                           																
+				                    <field name="point_expired_date"/>
+				                    <field name="reward_spend_amount"/>
+				                    <field name="limit_reward"/>				                    				                    				                                        	                    	                         	                           														
 								</group>
 							</group>	
 							<group string="Receipt Header and Footer" colspan="4">
@@ -342,7 +346,8 @@
             <field name="type">tree</field>						
             <field name="arch" type="xml">
                 <tree string="schemas">
-                    <field name="name"/>                        
+                    <field name="name"/>      
+                    <field name="calculation"/>                                           
                     <field name="start_date"/>
                     <field name="end_date"/>                     
                     <field name="state"/>
@@ -367,9 +372,16 @@
             <field name="arch" type="xml">
                 <form string="Redemption Blast Customer" version="7.0">  
                     <group>                                                                                                    
-                        <field name="search_type"/>
-                        <field name="by_zone"/>
-                        <field name="by_customer"/>
+                        <field name="search_type"/>                        
+                        <field name="customer_id" attrs="{'invisible':[('search_type','!=','customer')],'required':[('search_type','=','customer')]}"/>
+                        <field name="gender_id" attrs="{'invisible':[('search_type','!=','gender')],'required':[('search_type','=','gender')]}"/>
+                        <field name="ethnic_id" attrs="{'invisible':[('search_type','!=','ethnic')],'required':[('search_type','=','ethnic')]}"/>
+                        <field name="religion_id" attrs="{'invisible':[('search_type','!=','religion')],'required':[('search_type','=','religion')]}"/>
+                        <field name="marital_id" attrs="{'invisible':[('search_type','!=','marital')],'required':[('search_type','=','marital')]}"/>
+                        <field name="education_id" attrs="{'invisible':[('search_type','!=','education')],'required':[('search_type','=','education')]}"/>
+                        <field name="interest_id" attrs="{'invisible':[('search_type','!=','interest')],'required':[('search_type','=','interest')]}"/>
+                        <field name="occupation_id" attrs="{'invisible':[('search_type','!=','occupation')],'required':[('search_type','=','occupation')]}"/>
+                        <field name="zone_id" attrs="{'invisible':[('search_type','!=','zone')],'required':[('search_type','=','zone')]}"/>                        
                     </group>                    
                     <footer>
                         <button name="add_customer" string="Add Customer" type="object" class="oe_highlight"/>    
